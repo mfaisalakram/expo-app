@@ -1,8 +1,9 @@
 import {Booking, Detail, Home} from '@screen';
+import DrawerNavigator from '../components/Drawer';
 import React from 'react';
 import Animated from 'react-native-reanimated';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
-
+import { createDrawerNavigator } from '@react-navigation/drawer';
 const Screen = createSharedElementStackNavigator<StackHome>();
 
 export function springyFadeIn() {
@@ -41,35 +42,11 @@ const config = {
 };
 
 export const HomeStack = () => {
+  const Drawer = createDrawerNavigator();
   return (
-    <Screen.Navigator
-      mode="modal"
-      screenOptions={{
-        headerShown: false,
-        animationTypeForReplace: 'push',
-        gestureEnabled: true,
-        cardOverlayEnabled: true,
-        cardStyle: {backgroundColor: 'transparent'}
-      }}
-    >
-      <Screen.Screen name="Home" component={Home} />
-      <Screen.Screen
-        name="Booking"
-        component={Booking}
-        sharedElementsConfig={route => {
-          const {title} = route.params;
-
-          return [{id: `button.red.${title}`}];
-        }}
-      />
-      <Screen.Screen
-        name="Detail"
-        component={Detail}
-        sharedElementsConfig={route => {
-          const {title} = route.params;
-          return [{id: `item.${title}.card`}];
-        }}
-      />
-    </Screen.Navigator>
+    <Drawer.Navigator initialRouteName="Home">
+        <Drawer.Screen name="Home" component={Home} />
+        <Drawer.Screen name="Detail" component={Detail} options={{ headerShown: false }} />
+      </Drawer.Navigator>
   );
 };

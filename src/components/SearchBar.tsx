@@ -1,24 +1,30 @@
-import React from 'react';
+import React,{ useState } from 'react';
 import {
   Dimensions,
   StyleSheet,
   TextInput,
   TouchableOpacity,
   View,
+  Text
 } from 'react-native';
-import Menu from '../../assets/svg/menu.svg';
-import Search from '../../assets/svg/search.svg';
+import {Search,Menu} from '../../assets/svg/svg';
 import Box from './Box';
 import { Color } from 'types';
+import { Entypo ,Feather} from '@expo/vector-icons';
+import { SearchMovies } from 'api';
 
 const { width, height } = Dimensions.get('screen');
 
-const SearchBar: React.FC = () => {
+const SearchBar = () => {
+  const [query,setQuery] = useState('')
+  console.log({query});
+  
   return (
     <View style={styles.wraper}>
       <Box borderColor={Color.white} size={height * 0.06}>
-        <TouchableOpacity>
-          <Menu width={20} height={20} fill={Color.white} />
+        <TouchableOpacity onPress ={() =>{console.log('hello')
+        }}>
+        <Entypo name="menu" size={24} color="white" />
         </TouchableOpacity>
       </Box>
       <View style={[styles.container]}>
@@ -27,9 +33,13 @@ const SearchBar: React.FC = () => {
           allowFontScaling
           placeholderTextColor={Color.white}
           style={styles.input}
+          value = {query}
+          onChangeText = {setQuery}
           placeholder="Search Films..."
         />
-        <Search />
+        <TouchableOpacity onPress ={async() =>await SearchMovies(query)}>
+        <Feather name="search" size={24} color="white" />
+        </TouchableOpacity>
       </View>
     </View>
   );

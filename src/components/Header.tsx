@@ -11,7 +11,7 @@ type HeaderProps = {
   onPress?: (event: GestureResponderEvent) => void;
 };
 
-const Header: React.FC<HeaderProps> = ({title, onPress}) => (
+const Header: React.FC<HeaderProps> = ({title, onPress}:any) => (
   <View style={{flexDirection: 'row', alignContent: 'center', alignItems: 'center', marginTop: 10}}>
     <Box style={{marginLeft: 10}} size={40}>
       <TouchableOpacity onPress={onPress}>

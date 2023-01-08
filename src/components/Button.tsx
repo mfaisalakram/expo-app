@@ -14,7 +14,7 @@ interface Props {
   uniq?: any;
 }
 
-const Button: React.FC<Props> = ({disabled, text, onPress, color, per, backGround, paddingHorizontal, style, uniq}) => {
+const Button: React.FC<Props> = ({disabled, text, onPress, color, per, backGround, paddingHorizontal, style, uniq}:any) => {
   return (
     <TouchableOpacity disabled={disabled} onPress={onPress}>
       <SharedElement id={`button.red.${uniq}`}>

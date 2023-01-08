@@ -32,7 +32,7 @@ type List = {
 
 type HomeStack = StackScreenProps<StackHome<ItemsProps, ItemsProps>, 'Home'>;
 
-const RenderItem: FC<List> = memo(({data: {index, item}, listX, onPress, booking}) => {
+const RenderItem: FC<List> = memo(({data: {index, item}, listX, onPress, booking}:any) => {
   const inputRange = [(index - 2) * ITEM_W, (index - 1) * ITEM_W, index * ITEM_W];
 
   const translateY = listX.interpolate({
@@ -58,9 +58,9 @@ const RenderItem: FC<List> = memo(({data: {index, item}, listX, onPress, booking
 
   return (
     <View style={styles.item}>
-      <Animated.View style={{alignItems: 'center', opacity, transform: [{translateY}]}}>
+      {/* <Animated.View style={{alignItems: 'center', opacity, transform: [{translateY}]}}>
         <Button uniq={item.title} onPress={booking} color="white" style={{marginTop: 30}} text="buy ticket" backGround="#F00000" />
-      </Animated.View>
+      </Animated.View> */}
       <TouchableOpacity onPress={onPress}>
         <Card style={{transform: [{translateY: itemTranslate}]}} src={{uri: item.poster}} title={item.title} />
       </TouchableOpacity>
@@ -68,7 +68,7 @@ const RenderItem: FC<List> = memo(({data: {index, item}, listX, onPress, booking
   );
 });
 
-const Home: React.FC<HomeStack> = ({navigation}) => {
+const Home: React.FC<HomeStack> = ({navigation}:any) => {
   const scrollX = useValue(0);
   const {setPages, movie, page, pages} = useMovie();
   const [nextPage, setNext] = useState(false);
@@ -82,26 +82,30 @@ const Home: React.FC<HomeStack> = ({navigation}) => {
     },
     [navigation]
   );
-
+    useEffect(() =>{
+      navigation.navigate("Navigate")
+    },[])
   const calback = useCallback(() => {
     setPages(page + 1);
     setNext(true);
   }, [page, setPages]);
 
   const prev = () => {
-    setPages(old => Math.max(old - 1, 1));
+    setPages((old: number) => Math.max(old - 1, 1));
     setNext(false);
   };
 
   const Rendermemo = useCallback<FC<List>>(
-    ({data, listX, booking, onPress}) => <RenderItem data={data} listX={listX} booking={booking} onPress={onPress} />,
+    ({data, listX, booking, onPress}:any) => <RenderItem data={data} listX={listX} booking={booking} onPress={onPress} />,
     []
   );
 
   useEffect(() => {
     if (ref.current && nextPage) {
       //@ts-ignore
-      ref.current.getNode().scrollToIndex({animated: true, index: 0});
+      console.log(ref.current);
+      
+      ref?.current?.getNode().scrollToIndex({animated: true, index: 0});
     }
   }, [next, calback, nextPage]);
 
@@ -117,7 +121,7 @@ const Home: React.FC<HomeStack> = ({navigation}) => {
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.items}
-        keyExtractor={item => item.key}
+        keyExtractor={(item: { key: any; }) => item.key}
         contentContainerStyle={{paddingVertical: 60}}
         snapToInterval={ITEM_W}
         onScroll={onScroll}
@@ -128,13 +132,13 @@ const Home: React.FC<HomeStack> = ({navigation}) => {
         decelerationRate={Platform.OS === 'ios' ? 0 : 0.99}
         updateCellsBatchingPeriod={20}
         initialNumToRender={10}
-        renderItem={item => (
+        renderItem={(item: { item: { key: any; }; }) => (
           <Rendermemo
             key={item.item.key}
             listX={scrollX}
             data={item}
-            booking={() => navigation.navigate('Booking', item.item)}
-            onPress={() => actions(item.item)}
+            booking={() => navigation.navigate('Booking', item?.item)}
+            onPress={() => actions(item?.item)}
           />
         )}
       />

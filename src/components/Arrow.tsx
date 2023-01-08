@@ -1,19 +1,19 @@
 import React from 'react';
 import {GestureResponderEvent, StyleSheet, TouchableOpacity, ViewStyle} from 'react-native';
-import Buton from '../../assets/svg/arrow.svg';
+import {Buton} from '../../assets/svg/svg'
 
 interface Props {
-  rotate: string;
+  rotate: any;
   style?: ViewStyle;
   onPress?: (e: GestureResponderEvent) => void;
   disable?: boolean;
-  page?: number | string;
+  page?: number | any;
 }
 
-const Arrow: React.FC<Props> = ({rotate = '0deg', style, onPress, disable, page}) => {
+const Arrow: React.FC<Props> = ({rotate = '0deg', style, onPress, disable, page}:any) => {
   return (
     <TouchableOpacity disabled={disable} onPress={onPress} style={[styles.wraper, style]}>
-      <Buton width={25} height={25} fill="white" style={{transform: [{rotate}]}} />
+      <Buton />
     </TouchableOpacity>
   );
 };
