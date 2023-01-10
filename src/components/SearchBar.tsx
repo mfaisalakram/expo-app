@@ -18,7 +18,6 @@ const { width, height } = Dimensions.get('screen');
 const SearchBar = () => {
   const navigation = useNavigation();
   const [query, setQuery] = useState('');
-  console.log({ query });
   const toggle = () => navigation.dispatch(DrawerActions.toggleDrawer());
 
   return (

@@ -43,6 +43,10 @@ const genres = {
 
 const API_URL = (page: string | number) => `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=${page}`;
 const API_Search_URL = (type: string | number,query: any, page = 1) => `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&language=en-US&query=${query}&page=${page}&include_adult=false`;
+
+const API_GET_TV_SHOW = () => `https://api.themoviedb.org/3/tv/popular?api_key=${API_KEY}&language=en&page=${1}&include_adult=false&append_to_response=videos`;
+
+
 const getImagePath = (path: string) => `https://image.tmdb.org/t/p/w440_and_h660_face${path}`;
 const getBackdropPath = (path: string) => `https://image.tmdb.org/t/p/w370_and_h556_multi_faces${path}`;
 
@@ -87,3 +91,9 @@ export const SearchMovies = async (query: any, type?: any, pages = 1) =>{
 }
 
 
+export const GetTVShow =async () => {
+  const response = await fetch(API_GET_TV_SHOW()).then(x => x.json());
+  console.log({response});
+  
+  return response
+}

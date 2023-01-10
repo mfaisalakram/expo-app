@@ -15,6 +15,7 @@ import { Color } from 'types';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Fontisto } from '@expo/vector-icons';
+import { GetTVShow } from 'api';
 
 interface Props {
   navigation?: any;
@@ -47,7 +48,7 @@ export function DrawerContent(props: Props) {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles().sectionView}
-          onPress={() => navigateTo('TeamProfile')}
+          onPress={GetTVShow}
         >
           <FontAwesome name="tv" style={styles().sectionViewIcon} />
           <Text style={styles().sectionViewText}>TV Shows</Text>
