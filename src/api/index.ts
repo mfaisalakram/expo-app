@@ -85,3 +85,5 @@ export const SearchMovies = async (query: any, type?: any, pages = 1) =>{
   );
   return {page, total_pages, movies};
 }
+
+

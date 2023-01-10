@@ -1,7 +1,7 @@
-import {AnimatedFlatList, Arrow, BackDrops, Button, Card, SearchBar} from '@components';
-import {useMovie} from '@hooks';
-import {StackScreenProps} from '@react-navigation/stack';
-import React, {useCallback, useEffect, useRef, useState, memo, FC} from 'react';
+import { AnimatedFlatList, Arrow, BackDrops, Button, Card, SearchBar } from '@components';
+import { useMovie } from '@hooks';
+import { StackScreenProps } from '@react-navigation/stack';
+import React, { useCallback, useEffect, useRef, useState, memo, FC } from 'react';
 import {
   Dimensions,
   GestureResponderEvent,
@@ -14,12 +14,13 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
-import Animated, {Extrapolate, useValue} from 'react-native-reanimated';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { Color } from 'types';
+import Animated, { Extrapolate, useValue } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import {ITEM_W} from 'components/Card';
+import { ITEM_W } from 'components/Card';
 
-const {width, height} = Dimensions.get('screen');
+const { width, height } = Dimensions.get('screen');
 
 const EMTY = (width - ITEM_W) / 2;
 
@@ -32,7 +33,7 @@ type List = {
 
 type HomeStack = StackScreenProps<StackHome<ItemsProps, ItemsProps>, 'Home'>;
 
-const RenderItem: FC<List> = memo(({data: {index, item}, listX, onPress, booking}:any) => {
+const RenderItem: FC<List> = memo(({ data: { index, item }, listX, onPress, booking }: any) => {
   const inputRange = [(index - 2) * ITEM_W, (index - 1) * ITEM_W, index * ITEM_W];
 
   const translateY = listX.interpolate({
@@ -53,7 +54,7 @@ const RenderItem: FC<List> = memo(({data: {index, item}, listX, onPress, booking
   });
 
   if (!item.poster) {
-    return <View style={{width: EMTY}} />;
+    return <View style={{ width: EMTY }} />;
   }
 
   return (
@@ -62,29 +63,30 @@ const RenderItem: FC<List> = memo(({data: {index, item}, listX, onPress, booking
         <Button uniq={item.title} onPress={booking} color="white" style={{marginTop: 30}} text="buy ticket" backGround="#F00000" />
       </Animated.View> */}
       <TouchableOpacity onPress={onPress}>
-        <Card style={{transform: [{translateY: itemTranslate}]}} src={{uri: item.poster}} title={item.title} />
+        <Card style={{ transform: [{ translateY: itemTranslate }] }} src={{ uri: item.poster }} title={item.title} />
       </TouchableOpacity>
     </View>
   );
 });
 
-const Home: React.FC<HomeStack> = ({navigation}:any) => {
+const Home: React.FC<HomeStack> = ({ navigation }: any) => {
   const scrollX = useValue(0);
-  const {setPages, movie, page, pages} = useMovie();
+  const { setPages, movie, page, pages } = useMovie();
   const [nextPage, setNext] = useState(false);
   const ref = useRef<Animated.ScrollView & ScrollView>(null);
-  const onScroll = Animated.event<NativeSyntheticEvent<NativeScrollEvent>>([{nativeEvent: {contentOffset: {x: scrollX}}}]);
+  const onScroll = Animated.event<NativeSyntheticEvent<NativeScrollEvent>>([{ nativeEvent: { contentOffset: { x: scrollX } } }]);
   const next = Number(pages?.total) - Number(pages?.page);
 
   const actions = useCallback(
     (items: ItemsProps) => {
+      console.log('movieeeeee: ', items)
       navigation.navigate('Detail', items);
     },
     [navigation]
   );
-    useEffect(() =>{
-      navigation.navigate("Navigate")
-    },[])
+  useEffect(() => {
+    navigation.navigate("Navigate")
+  }, [])
   const calback = useCallback(() => {
     setPages(page + 1);
     setNext(true);
@@ -96,7 +98,7 @@ const Home: React.FC<HomeStack> = ({navigation}:any) => {
   };
 
   const Rendermemo = useCallback<FC<List>>(
-    ({data, listX, booking, onPress}:any) => <RenderItem data={data} listX={listX} booking={booking} onPress={onPress} />,
+    ({ data, listX, booking, onPress }: any) => <RenderItem data={data} listX={listX} booking={booking} onPress={onPress} />,
     []
   );
 
@@ -104,8 +106,8 @@ const Home: React.FC<HomeStack> = ({navigation}:any) => {
     if (ref.current && nextPage) {
       //@ts-ignore
       console.log(ref.current);
-      
-      ref?.current?.getNode().scrollToIndex({animated: true, index: 0});
+
+      ref?.current?.getNode().scrollToEnd({ animated: true, index: 0 });
     }
   }, [next, calback, nextPage]);
 
@@ -113,8 +115,8 @@ const Home: React.FC<HomeStack> = ({navigation}:any) => {
     <SafeAreaView style={styles.container}>
       <SearchBar />
       <BackDrops x={scrollX} data={movie!} />
-      <Arrow disable={page === 1} onPress={prev} rotate="180deg" style={{top: height * 0.4, left: width * 0.04, zIndex: 20}} />
-      <Arrow disable={next === 0} onPress={() => calback()} rotate="0deg" style={{top: height * 0.4, right: width * 0.04, zIndex: 21}} />
+      <Arrow disable={page === 1} onPress={prev} rotate="180deg" style={{ top: height * 0.4, left: width * 0.04, zIndex: 20 }} />
+      <Arrow disable={next === 0} onPress={() => calback()} rotate="0deg" style={{ top: height * 0.4, right: width * 0.04, zIndex: 21 }} />
       <AnimatedFlatList
         data={movie}
         ref={ref}
@@ -122,7 +124,7 @@ const Home: React.FC<HomeStack> = ({navigation}:any) => {
         showsHorizontalScrollIndicator={false}
         style={styles.items}
         keyExtractor={(item: { key: any; }) => item.key}
-        contentContainerStyle={{paddingVertical: 60}}
+        contentContainerStyle={{ paddingVertical: 60 }}
         snapToInterval={ITEM_W}
         onScroll={onScroll}
         onEndReachedThreshold={0.2}
@@ -149,7 +151,8 @@ const Home: React.FC<HomeStack> = ({navigation}:any) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    backgroundColor: Color.purple1
   },
   items: {
     ...StyleSheet.absoluteFillObject,

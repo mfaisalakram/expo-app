@@ -1,9 +1,9 @@
-import {Booking, Detail, Home} from '@screen';
-import DrawerNavigator from '../components/Drawer';
+import { Booking, Detail, Home } from '@screen';
 import React from 'react';
 import Animated from 'react-native-reanimated';
-import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import { createSharedElementStackNavigator } from 'react-navigation-shared-element';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { DrawerContent } from './drawer-content';
 const Screen = createSharedElementStackNavigator<StackHome>();
 
 export function springyFadeIn() {
@@ -15,15 +15,15 @@ export function springyFadeIn() {
 
   return {
     transitionSpec,
-    screenInterpolator: ({position, scene}: any) => {
-      const {index} = scene;
+    screenInterpolator: ({ position, scene }: any) => {
+      const { index } = scene;
 
       const opacity = position.interpolate({
         inputRange: [index - 1, index],
         outputRange: [0, 1]
       });
 
-      return {opacity};
+      return { opacity };
     }
   };
 }
@@ -44,9 +44,16 @@ const config = {
 export const HomeStack = () => {
   const Drawer = createDrawerNavigator();
   return (
-    <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={Home} />
-        <Drawer.Screen name="Detail" component={Detail} options={{ headerShown: false }} />
-      </Drawer.Navigator>
+    <Drawer.Navigator initialRouteName="Home" screenOptions={{
+      drawerStyle: {
+        width: 300,
+      },
+      headerTintColor: '#000',
+      headerShown: false,
+    }}
+      drawerContent={() => <DrawerContent />}>
+      <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="Detail" component={Detail} options={{ headerShown: false }} />
+    </Drawer.Navigator>
   );
 };

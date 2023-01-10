@@ -4,7 +4,7 @@ import { HomeStack } from '@router';
 import React from 'react';
 import { ActivityIndicator, Modal, StatusBar, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Color } from 'typed';
+import { Color } from 'types';
 function Main() {
   const { loading } = useMovie();
   return (
