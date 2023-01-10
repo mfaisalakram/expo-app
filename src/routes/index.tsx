@@ -5,6 +5,7 @@ import { createSharedElementStackNavigator } from 'react-navigation-shared-eleme
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DrawerContent } from './drawer-content';
 import Setting from 'screen/Setting';
+import Search from 'screen/Search';
 const Screen = createSharedElementStackNavigator<StackHome>();
 
 export function springyFadeIn() {
@@ -64,6 +65,7 @@ export const HomeStack = () => {
       />
 
       <Drawer.Screen name="Setting" component={Setting} />
+      <Drawer.Screen name="Search" component={Search} />
     </Drawer.Navigator>
   );
 };
