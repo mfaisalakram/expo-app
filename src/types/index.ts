@@ -1,8 +1,9 @@
 export enum Color {
   purple1 = '#250836',
-  purple2='#9138A2',
-  yellow1='#FAB911',
-  black1= '#000',
+  purple2 = '#9138A2',
+  purple3 = `#28093F`,
+  yellow1 = '#FAB911',
+  black1 = '#000',
   blue1 = 'rgb(105, 41, 255)',
   hitam1 = 'rgba(200, 200, 200, 0.3)',
   kuning = '#F7BB0E',

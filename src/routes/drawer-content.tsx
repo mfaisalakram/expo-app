@@ -12,6 +12,10 @@ import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { Color } from 'types';
+import { FontAwesome } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
+import { Fontisto } from '@expo/vector-icons';
+
 interface Props {
   navigation?: any;
 }
@@ -32,68 +36,42 @@ export function DrawerContent(props: Props) {
 
   return (
     <View style={styles().container}>
-
       <DrawerContentScrollView>
-        <Text style={styles().heading}>MENU</Text>
+        <Text style={styles().heading}>WELCOME!</Text>
         <TouchableOpacity
           style={styles().sectionView}
           onPress={() => navigateTo('Aboutus')}
         >
-          <Feather
-            name="alert-circle"
-            style={styles().sectionViewIcon}
-          />
-          <Text style={styles().sectionViewText}>
-            Home
-          </Text>
+          <Feather name="home" style={styles().sectionViewIcon} />
+          <Text style={styles().sectionViewText}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles().sectionView}
           onPress={() => navigateTo('TeamProfile')}
         >
-          <Entypo
-            name="users"
-            style={styles().sectionViewIcon}
-          />
-          <Text style={styles().sectionViewText}>
-            TV Shows
-          </Text>
+          <FontAwesome name="tv" style={styles().sectionViewIcon} />
+          <Text style={styles().sectionViewText}>TV Shows</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles().sectionView}
           onPress={() => navigateTo('TeamProfile')}
         >
-          <Entypo
-            name="users"
-            style={styles().sectionViewIcon}
-          />
-          <Text style={styles().sectionViewText}>
-            TV Shows
-          </Text>
+          <Entypo name="users" style={styles().sectionViewIcon} />
+          <Text style={styles().sectionViewText}>Theaters</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles().sectionView}
           onPress={() => navigateTo('TeamProfile')}
         >
-          <Entypo
-            name="users"
-            style={styles().sectionViewIcon}
-          />
-          <Text style={styles().sectionViewText}>
-            Theaters
-          </Text>
+          <Fontisto name="favorite" style={styles().sectionViewIcon} />
+          <Text style={styles().sectionViewText}>My Favorite</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles().sectionView}
-          onPress={() => navigateTo('TeamProfile')}
+          onPress={() => navigateTo('Setting')}
         >
-          <Entypo
-            name="users"
-            style={styles().sectionViewIcon}
-          />
-          <Text style={styles().sectionViewText}>
-            My Favorite
-          </Text>
+          <AntDesign name="setting" style={styles().sectionViewIcon} />
+          <Text style={styles().sectionViewText}>Setting</Text>
         </TouchableOpacity>
       </DrawerContentScrollView>
     </View>
@@ -107,11 +85,12 @@ const styles = (color?: string) =>
       backgroundColor: Color.purple1,
     },
     heading: {
-      fontWeight: 'bold',
       marginTop: '10%',
       marginBottom: '10%',
       color: Color.white,
       marginLeft: '6%',
+      fontSize: 20,
+      letterSpacing: 2,
     },
     TopView: {
       flexDirection: 'row',
@@ -139,10 +118,13 @@ const styles = (color?: string) =>
       overflow: 'hidden',
     },
     sectionView: {
-      marginBottom: '10%',
-      marginLeft: '6%',
       display: 'flex',
       flexDirection: 'row',
+      backgroundColor: Color.purple3,
+      paddingVertical: 20,
+      paddingLeft: '6%',
+      borderTopRightRadius: 40,
+      borderBottomRightRadius: 40,
     },
     sectionViewToggle: { top: -10, marginLeft: 10 },
     sectionViewText: {
@@ -152,7 +134,7 @@ const styles = (color?: string) =>
       marginTop: 2,
     },
     sectionViewIcon: {
-      color: color,
+      color: Color.white,
       fontSize: 18,
       marginTop: '1%',
     },
