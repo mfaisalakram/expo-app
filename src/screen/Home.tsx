@@ -2,6 +2,7 @@ import { AnimatedFlatList, Arrow, BackDrops, Button, Card, SearchBar } from '@co
 import { useMovie } from '@hooks';
 import { StackScreenProps } from '@react-navigation/stack';
 import React, { useCallback, useEffect, useRef, useState, memo, FC } from 'react';
+import { AntDesign } from '@expo/vector-icons';
 import {
   Dimensions,
   GestureResponderEvent,
@@ -19,6 +20,7 @@ import Animated, { Extrapolate, useValue } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ITEM_W } from 'components/Card';
+import { getMovies } from 'api';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -73,6 +75,7 @@ const Home: React.FC<HomeStack> = ({ navigation }: any) => {
   const scrollX = useValue(0);
   const { setPages, movie, page, pages } = useMovie();
   const [nextPage, setNext] = useState(false);
+  const [prevPage, setPrevPage] = useState(false);
   const ref = useRef<Animated.ScrollView & ScrollView>(null);
   const onScroll = Animated.event<NativeSyntheticEvent<NativeScrollEvent>>([{ nativeEvent: { contentOffset: { x: scrollX } } }]);
   const next = Number(pages?.total) - Number(pages?.page);
@@ -84,9 +87,7 @@ const Home: React.FC<HomeStack> = ({ navigation }: any) => {
     },
     [navigation]
   );
-  useEffect(() => {
-    navigation.navigate("Navigate")
-  }, [])
+
   const calback = useCallback(() => {
     setPages(page + 1);
     setNext(true);
@@ -94,7 +95,7 @@ const Home: React.FC<HomeStack> = ({ navigation }: any) => {
 
   const prev = () => {
     setPages((old: number) => Math.max(old - 1, 1));
-    setNext(false);
+    setPrevPage(true);
   };
 
   const Rendermemo = useCallback<FC<List>>(
@@ -105,9 +106,12 @@ const Home: React.FC<HomeStack> = ({ navigation }: any) => {
   useEffect(() => {
     if (ref.current && nextPage) {
       //@ts-ignore
-      console.log(ref.current);
+      getMovies(page + 1)
 
-      ref?.current?.getNode().scrollToEnd({ animated: true, index: 0 });
+    }
+    else if (ref.current && prevPage) {
+      getMovies(page - 1)
+
     }
   }, [next, calback, nextPage]);
 
@@ -115,8 +119,17 @@ const Home: React.FC<HomeStack> = ({ navigation }: any) => {
     <SafeAreaView style={styles.container}>
       <SearchBar />
       <BackDrops x={scrollX} data={movie!} />
-      <Arrow disable={page === 1} onPress={prev} rotate="180deg" style={{ top: height * 0.4, left: width * 0.04, zIndex: 20 }} />
-      <Arrow disable={next === 0} onPress={() => calback()} rotate="0deg" style={{ top: height * 0.4, right: width * 0.04, zIndex: 21 }} />
+      <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', width: '200%' }}>
+
+        <TouchableOpacity disable={next === 0} onPress={() => calback()} style={{ top: height * 0.3, right: width * 0.04, zIndex: 21 }}>
+          <AntDesign name="banckward" size={24} color="white" />
+        </TouchableOpacity>
+        <TouchableOpacity disable={page === 1 ? true : false} onPress={prev} style={{ top: height * 0.3, left: width * 0.04, zIndex: 20 }}  >
+          <AntDesign name="forward" size={24} color="white" />
+        </TouchableOpacity>
+      </View>
+      {/* <Arrow disable={page === 1} onPress={prev} rotate="180deg" style={{ top: height * 0.4, left: width * 0.04, zIndex: 20 }} />
+      <Arrow disable={next === 0} onPress={() => calback()} rotate="0deg" style={{ top: height * 0.4, right: width * 0.04, zIndex: 21 }} /> */}
       <AnimatedFlatList
         data={movie}
         ref={ref}
@@ -139,7 +152,6 @@ const Home: React.FC<HomeStack> = ({ navigation }: any) => {
             key={item.item.key}
             listX={scrollX}
             data={item}
-            booking={() => navigation.navigate('Booking', item?.item)}
             onPress={() => actions(item?.item)}
           />
         )}
