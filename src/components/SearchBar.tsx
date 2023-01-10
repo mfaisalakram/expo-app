@@ -1,4 +1,4 @@
-import React,{ useState } from 'react';
+import React, { useState } from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -7,24 +7,25 @@ import {
   View,
   Text
 } from 'react-native';
-import {Search,Menu} from '../../assets/svg/svg';
 import Box from './Box';
 import { Color } from 'types';
-import { Entypo ,Feather} from '@expo/vector-icons';
+import { Entypo, Feather } from '@expo/vector-icons';
 import { SearchMovies } from 'api';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('screen');
 
 const SearchBar = () => {
-  const [query,setQuery] = useState('')
-  console.log({query});
-  
+  const navigation = useNavigation()
+  const [query, setQuery] = useState('')
+  console.log({ query });
+  const toggle = () => navigation.dispatch(DrawerActions.toggleDrawer());
+
   return (
     <View style={styles.wraper}>
       <Box borderColor={Color.white} size={height * 0.06}>
-        <TouchableOpacity onPress ={() =>{console.log('hello')
-        }}>
-        <Entypo name="menu" size={24} color="white" />
+        <TouchableOpacity onPress={toggle}>
+          <Entypo name="menu" size={24} color="white" />
         </TouchableOpacity>
       </Box>
       <View style={[styles.container]}>
@@ -33,12 +34,12 @@ const SearchBar = () => {
           allowFontScaling
           placeholderTextColor={Color.white}
           style={styles.input}
-          value = {query}
-          onChangeText = {setQuery}
+          value={query}
+          onChangeText={setQuery}
           placeholder="Search Films..."
         />
-        <TouchableOpacity onPress ={async() =>await SearchMovies(query)}>
-        <Feather name="search" size={24} color="white" />
+        <TouchableOpacity onPress={async () => await SearchMovies(query)}>
+          <Feather name="search" size={24} color="white" />
         </TouchableOpacity>
       </View>
     </View>

@@ -53,7 +53,7 @@ export const HomeStack = () => {
     }}
       drawerContent={() => <DrawerContent />}>
       <Drawer.Screen name="Home" component={Home} />
-      <Drawer.Screen name="Detail" component={Detail} options={{ headerShown: false }} />
+      {/* <Drawer.Screen name="Detail" component={Detail} options={{ headerShown: false }} /> */}
     </Drawer.Navigator>
   );
 };
