@@ -8,14 +8,8 @@ import {
 } from '@components';
 import { useMovie } from '@hooks';
 import { StackScreenProps } from '@react-navigation/stack';
-import React, {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  memo,
-  FC,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState, memo, FC } from 'react';
+import { AntDesign } from '@expo/vector-icons';
 import {
   Dimensions,
   GestureResponderEvent,
@@ -33,6 +27,7 @@ import Animated, { Extrapolate, useValue } from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ITEM_W } from 'components/Card';
+import { getMovies } from 'api';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -78,9 +73,6 @@ const RenderItem: FC<List> = memo(
 
     return (
       <View style={styles.item}>
-        {/* <Animated.View style={{alignItems: 'center', opacity, transform: [{translateY}]}}>
-        <Button uniq={item.title} onPress={booking} color="white" style={{marginTop: 30}} text="buy ticket" backGround="#F00000" />
-      </Animated.View> */}
         <TouchableOpacity onPress={onPress}>
           <Card
             style={{ transform: [{ translateY: itemTranslate }] }}
@@ -97,6 +89,7 @@ const Home: React.FC<HomeStack> = ({ navigation }: any) => {
   const scrollX = useValue(0);
   const { setPages, movie, page, pages } = useMovie();
   const [nextPage, setNext] = useState(false);
+  const [prevPage, setPrevPage] = useState(false);
   const ref = useRef<Animated.ScrollView & ScrollView>(null);
   const onScroll = Animated.event<NativeSyntheticEvent<NativeScrollEvent>>([
     { nativeEvent: { contentOffset: { x: scrollX } } },
@@ -105,14 +98,10 @@ const Home: React.FC<HomeStack> = ({ navigation }: any) => {
 
   const actions = useCallback(
     (items: ItemsProps) => {
-      console.log('movieeeeee: ', items);
       navigation.navigate('Detail', items);
     },
     [navigation]
   );
-  useEffect(() => {
-    navigation.navigate('Navigate');
-  }, []);
   const calback = useCallback(() => {
     setPages(page + 1);
     setNext(true);
@@ -120,7 +109,7 @@ const Home: React.FC<HomeStack> = ({ navigation }: any) => {
 
   const prev = () => {
     setPages((old: number) => Math.max(old - 1, 1));
-    setNext(false);
+    setPrevPage(true);
   };
 
   const Rendermemo = useCallback<FC<List>>(
@@ -138,9 +127,12 @@ const Home: React.FC<HomeStack> = ({ navigation }: any) => {
   useEffect(() => {
     if (ref.current && nextPage) {
       //@ts-ignore
-      console.log(ref.current);
+      getMovies(page + 1)
 
-      ref?.current?.getNode().scrollToEnd({ animated: true, index: 0 });
+    }
+    else if (ref.current && prevPage) {
+      getMovies(page - 1)
+
     }
   }, [next, calback, nextPage]);
 
@@ -182,7 +174,6 @@ const Home: React.FC<HomeStack> = ({ navigation }: any) => {
             key={item.item.key}
             listX={scrollX}
             data={item}
-            booking={() => navigation.navigate('Booking', item?.item)}
             onPress={() => actions(item?.item)}
           />
         )}

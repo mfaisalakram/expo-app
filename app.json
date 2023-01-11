@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "AwesomeProject",
-    "slug": "AwesomeProject",
+    "name": "MoviesApp",
+    "slug": "MoviesApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -24,10 +24,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.faisalakram.MoviesApp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f6d30e57-1dd1-42a2-bf6b-acac9669f81d"
+      }
     }
   }
 }

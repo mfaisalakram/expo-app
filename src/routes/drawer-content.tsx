@@ -23,6 +23,7 @@ interface Props {
 export type ButtonStylesContext = {
   disabled?: boolean;
 };
+
 export function DrawerContent(props: Props) {
   const navigation = useNavigation();
   const navigateTo = (screen: any) => {

@@ -13,9 +13,9 @@ import { Entypo, Feather } from '@expo/vector-icons';
 import { SearchMovies } from 'api';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 
-const { width, height } = Dimensions.get('screen');
 
-const SearchBar = ({ home }: any) => {
+const { width, height } = Dimensions.get('screen');
+const SearchBar = ({ home, searchText, setSearchText, onSubmit }: any) => {
   const navigation = useNavigation();
   const navigateTo = (screen: any) => {
     const dt: never = {
@@ -31,13 +31,11 @@ const SearchBar = ({ home }: any) => {
 
   return (
     <View style={styles().wraper}>
-      {home && (
-        <Box borderColor={Color.purple1} size={height * 0.06}>
-          <TouchableOpacity onPress={toggle}>
-            <Entypo name="menu" size={24} color={Color.purple2} />
-          </TouchableOpacity>
-        </Box>
-      )}
+      <Box borderColor={home ? Color.purple1 : Color.purple2} size={height * 0.06}>
+        <TouchableOpacity onPress={toggle}>
+          <Entypo name="menu" size={24} color={Color.purple2} />
+        </TouchableOpacity>
+      </Box>
       <TouchableOpacity
         style={[styles(home).container]}
         onPress={() => {
@@ -52,17 +50,18 @@ const SearchBar = ({ home }: any) => {
           numberOfLines={1}
           placeholderTextColor={Color.purple2}
           style={styles().input}
-          value={query}
-          onChangeText={setQuery}
+          value={searchText}
+          onChangeText={setSearchText}
           placeholder="Search Films..."
           editable={home ? false : true}
           selectTextOnFocus={home ? false : true}
+          onSubmitEditing={() => onSubmit()}
         />
         <TouchableOpacity
           onPress={async () => await SearchMovies(query)}
           style={styles().searchBox}
         >
-          <Feather name="search" size={24} color={Color.purple2} />
+          <Feather name="search" size={24} color={Color.purple2} onPress={() => onSubmit()} />
         </TouchableOpacity>
       </TouchableOpacity>
     </View>

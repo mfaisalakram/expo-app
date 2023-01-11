@@ -1,10 +1,10 @@
-import {useFetchMore} from '@utils';
-import React, {createContext, useContext, useState} from 'react';
+import { useFetchMore } from '@utils';
+import React, { createContext, useContext, useState } from 'react';
 
 interface Context {
   loading: boolean;
   movie: ItemsProps[];
-  pages: {page: string | number; total: string | number};
+  pages: { page: string | number; total: string | number };
   setPages: React.Dispatch<React.SetStateAction<number>>;
   page: number;
 }
@@ -19,13 +19,13 @@ export function useMovie() {
   return ctx;
 }
 
-const Provides: React.FC = ({children}) => {
+const Provides: React.FC = ({ children }) => {
   const [page, setPages] = useState(1);
   const [movie, loading, pages] = useFetchMore(page);
 
   // const value = useMemo(() => ({movie, loading, pages, page, setPages}), []);
 
-  return <ContextAPI.Provider value={{movie, loading, page, setPages, pages}}>{children}</ContextAPI.Provider>;
+  return <ContextAPI.Provider value={{ movie, loading, page, setPages, pages }}>{children}</ContextAPI.Provider>;
 };
 
 export default Provides;

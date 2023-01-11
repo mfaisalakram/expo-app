@@ -42,8 +42,12 @@ const Detail: React.FC<DetailStack> = ({ route }) => {
     }
   };
   useEffect(() => {
-    getMovieDetail(params?.key);
-  }, [params?.key]);
+    if (params?.key) {
+      getMovieDetail(params?.key);
+    } else {
+      getMovieDetail(params?.id);
+    }
+  }, [params?.key, params?.id]);
 
   return (
     <View style={[styles.root]}>
