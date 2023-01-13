@@ -16,9 +16,10 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
-
+import { MaterialIcons } from '@expo/vector-icons';
 import { Color } from 'typed';
 import { useNavigation } from '@react-navigation/native';
+import { useMovie } from 'hooks';
 
 type DetailStack = StackScreenProps<StackHome<any, any, ItemsProps>, 'Detail'>;
 
@@ -27,6 +28,7 @@ const Detail: React.FC<DetailStack> = ({ route }) => {
   const [movieDetail, setMovieDetail] = useState<any>({});
   const [loader, setLoader] = useState(false);
   const [movies, setMovies] = useState([]);
+  const { favorite, setFavorites } = useMovie();
 
   const navigation = useNavigation();
 
@@ -91,6 +93,32 @@ const Detail: React.FC<DetailStack> = ({ route }) => {
     getAllMovies();
   }, [params?.key, params?.id]);
 
+  const checkFav = (id) => favorite?.filter((dt) => {
+    return (dt === id)
+  });
+  const notFav = (id) => favorite?.filter((dt) => {
+    return (dt !== id)
+  });
+  console.log({ favorite });
+
+  const addFav = (id: Number) => {
+    console.log({ id });
+    let check1 = checkFav(id)
+    console.log({ check1, favorite });
+    let check = true
+    if (check1.length > 0) {
+
+      check = false
+    }
+    if (id && check) {
+      setFavorites(favorite => [...favorite, id]);
+    }
+    else if (id) {
+      const getId = notFav(id)
+      setFavorites(getId)
+    }
+    // setFavorites([...favorite, id])
+  }
 
   return (
     <View style={[styles.root]}>
@@ -148,13 +176,29 @@ const Detail: React.FC<DetailStack> = ({ route }) => {
             </View>
           </SharedElement>
           <ScrollView style={styles.slider}>
-            {movieDetail?.overview && <View style={styles.summaryView}>
-              <Text style={styles.summaryHeading}>
-                <FontAwesome name="pause" size={12} color={Color.purple2} />{' '}
-                Summary
-              </Text>
-              <Text style={styles.summaryText}>{movieDetail?.overview}</Text>
-            </View>}
+            <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+              {movieDetail?.overview && <View style={styles.summaryView}>
+                <Text style={styles.summaryHeading}>
+                  <FontAwesome name="pause" size={12} color={Color.purple2} />{' '}
+                  Summary
+                </Text>
+                <Text style={styles.summaryText}>{movieDetail?.overview}</Text>
+              </View>}
+              <TouchableOpacity style={{ top: 20, right: 30 }} onPress={() => { addFav(movieDetail?.id) }}>
+                {favorite?.length > 0 ? <>
+                  {favorite?.map((id) => {
+                    return (
+                      <>
+                        {console.log("jkljhefhwejh")
+                        }
+                        {id === movieDetail?.id ? <MaterialIcons name="favorite" size={24} color="white" /> : <MaterialIcons name="favorite-border" size={24} color="white" />}
+                      </>
+                    )
+                  })}
+                </> : <MaterialIcons name="favorite-border" size={24} color="white" />}
+
+              </TouchableOpacity>
+            </View>
 
             {movieDetail?.credits?.cast.length > 0 && <View style={styles.summaryView}>
               <Text style={styles.summaryHeading}>
