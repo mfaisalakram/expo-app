@@ -15,8 +15,10 @@ import { API_KEY, POSTER_BASE_URL } from '@config';
 import { StackScreenProps } from '@react-navigation/stack';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 
 import { Color } from 'typed';
+import { useNavigation } from '@react-navigation/native';
 
 type DetailStack = StackScreenProps<StackHome<any, any, ItemsProps>, 'Detail'>;
 
@@ -24,8 +26,30 @@ const Detail: React.FC<DetailStack> = ({ route }) => {
   const params = route.params;
   const [movieDetail, setMovieDetail] = useState<any>({});
   const [loader, setLoader] = useState(false);
+  const [movies, setMovies] = useState([]);
+
+  const navigation = useNavigation();
+
 
   const getMovieDetail = async (movieId: any) => {
+    console.log(movieId)
+    try {
+      setLoader(true);
+      const response = await axios.get(
+        `https://api.themoviedb.org/3/${params?.tv ? 'tv' : 'movie'}/${movieId}?api_key=${API_KEY}&language=en-US&page=1&include_adult=false&append_to_response=videos,credits`
+      );
+      if (response.data) {
+        setLoader(false);
+        setMovieDetail(() => response.data);
+      } else {
+        setLoader(false);
+      }
+    } catch (err) {
+      setLoader(false);
+    }
+  };
+
+  const getMovieReview = async (movieId: any) => {
     try {
       setLoader(true);
       const response = await axios.get(
@@ -41,13 +65,32 @@ const Detail: React.FC<DetailStack> = ({ route }) => {
       setLoader(false);
     }
   };
+
+
+  const getAllMovies = async () => {
+    try {
+      const res = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=${1}`)
+      if (res.data) {
+        setMovies(res?.data?.results)
+      } else {
+        setMovies([])
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   useEffect(() => {
     if (params?.key) {
       getMovieDetail(params?.key);
+      // getMovieReview(params?.key);
     } else {
       getMovieDetail(params?.id);
+      // getMovieReview(params?.id);
     }
+
+    getAllMovies();
   }, [params?.key, params?.id]);
+
 
   return (
     <View style={[styles.root]}>
@@ -75,12 +118,20 @@ const Detail: React.FC<DetailStack> = ({ route }) => {
               resizeMode="cover"
               style={styles.img}
             />
+
+            <TouchableOpacity style={{ position: 'absolute', top: 20, left: 20 }} onPress={() => navigation.goBack()}><AntDesign name="left" size={30} color={Color.purple2} style={{ fontWeight: 'bold', backgroundColor: Color.purple1, borderRadius: 5, padding: 3 }} /></TouchableOpacity>
+
+            <TouchableOpacity style={{ position: 'absolute', top: 20, right: 20 }} onPress={() => navigation.navigate('Search')}>
+
+              <Feather name="search" size={30} color={Color.purple2} style={{ fontWeight: 'bold', backgroundColor: Color.purple1, borderRadius: 5, padding: 3 }} />
+            </TouchableOpacity>
+
             <View style={{ position: 'absolute', bottom: 20, left: 20 }}>
               <>
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
-                  <Text style={styles.yearText}>2022</Text>
+                  <Text style={styles.yearText}>{movieDetail?.release_date?.substring(0, 4)}</Text>
                   <Text style={styles.yearRaiting}>
-                    3.8 <AntDesign name="star" size={12} color="black" />
+                    {(Math.round(movieDetail.vote_average * 100) / 100).toFixed(1)} <AntDesign name="star" size={12} color="black" />
                   </Text>
                 </View>
                 <Text style={styles.titleText}>
@@ -108,21 +159,13 @@ const Detail: React.FC<DetailStack> = ({ route }) => {
             <View style={styles.summaryView}>
               <Text style={styles.summaryHeading}>
                 <FontAwesome name="pause" size={12} color={Color.purple2} />{' '}
-                Review
-              </Text>
-              <Text style={styles.summaryText}>{movieDetail?.overview}</Text>
-            </View>
-
-            <View style={styles.summaryView}>
-              <Text style={styles.summaryHeading}>
-                <FontAwesome name="pause" size={12} color={Color.purple2} />{' '}
                 Cast
               </Text>
               <ScrollView style={{ flexDirection: 'row' }} horizontal={true}>
                 {movieDetail?.credits?.cast?.map(
-                  ({ profile_path, known_for_department, name }: any) => {
+                  ({ profile_path, known_for_department, name, id }: any) => {
                     return (
-                      <View style={styles.actorCard}>
+                      <TouchableOpacity onPress={() => navigation.navigate('PersonDetail', { id })} style={styles.actorCard}>
                         <View style={{ backgroundColor: Color.gray2 }}>
                           <Image
                             source={{
@@ -137,7 +180,7 @@ const Detail: React.FC<DetailStack> = ({ route }) => {
                         <Text style={styles.actorDepartmentText}>
                           {known_for_department}
                         </Text>
-                      </View>
+                      </TouchableOpacity>
                     );
                   }
                 )}
@@ -147,36 +190,40 @@ const Detail: React.FC<DetailStack> = ({ route }) => {
             <View style={styles.summaryView}>
               <Text style={styles.summaryHeading}>
                 <FontAwesome name="pause" size={12} color={Color.purple2} /> You
-                May Linke
+                May Like
               </Text>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <View style={{ flexDirection: 'row' }}>
-                  <Image
-                    source={{
-                      uri: `https://m.media-amazon.com/images/M/MV5BNzU4NWEwNDItMzMzYy00ZDYyLWIxZjMtMDlkYWVjNjQwYzBjXkEyXkFqcGdeQXVyMDM2NDM2MQ@@._V1_.jpg`,
-                    }}
-                    resizeMode="cover"
-                    style={{ width: 80, height: 80, marginRight: 10 }}
-                  />
+              {movies?.map((item) => (
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    marginVertical: 10
+                  }}
+                  onPress={() => { navigation.navigate('Detail', item) }}
+                >
+                  <View style={{ flexDirection: 'row' }}>
+                    <Image
+                      source={{
+                        uri: `${POSTER_BASE_URL}${item?.poster_path}`,
+                      }}
+                      resizeMode="cover"
+                      style={{ width: 80, height: 80, marginRight: 10 }}
+                    />
+                    <View>
+                      <Text style={{ color: Color.white, width: 120 }}>{item?.title}</Text>
+                      <Text style={{ color: Color.gray2 }}>
+                        #Family #Horror #Drama
+                      </Text>
+                    </View>
+                  </View>
+
                   <View>
-                    <Text style={{ color: Color.white }}>Title of move</Text>
-                    <Text style={{ color: Color.gray2 }}>
-                      2202 dat now you are
+                    <Text style={styles.movieRaiting}>
+                      {item?.vote_average} <AntDesign name="star" size={12} color="black" />
                     </Text>
                   </View>
-                </View>
-
-                <View>
-                  <Text style={styles.movieRaiting}>
-                    3.8 <AntDesign name="star" size={12} color="black" />
-                  </Text>
-                </View>
-              </View>
+                </TouchableOpacity>
+              ))}
             </View>
           </ScrollView>
         </>
@@ -202,12 +249,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 21,
-    marginBottom: 20,
+    marginVertical: 10,
   },
   yearText: {
     backgroundColor: Color.white,
     color: Color.black1,
-    marginHorizontal: 5,
+    marginRight: 5,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 2,
@@ -263,5 +310,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 2,
+    width: 'auto',
   },
 });

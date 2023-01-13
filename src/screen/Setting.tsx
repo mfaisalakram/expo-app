@@ -59,7 +59,14 @@ const Setting: React.FC<SettingStack> = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: Color.purple1, padding: 20 }}>
-      <Text style={{ color: '#fff', fontSize: 20 }}>Setting</Text>
+      <View style={styles?.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <AntDesign name="left" size={20} color="white" />
+        </TouchableOpacity>
+
+        <Text style={{ color: '#fff', fontSize: 20 }}>Setting</Text>
+        <Text></Text>
+      </View>
 
       <TouchableOpacity
         style={styles.item}
@@ -107,6 +114,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 4,
     borderBottomColor: Color.purple2,
   },
+  header: { flexDirection: 'row', justifyContent: 'space-between' },
   itemText: {
     color: '#fff',
     marginLeft: 20,

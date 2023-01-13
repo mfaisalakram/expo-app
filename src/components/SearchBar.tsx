@@ -56,6 +56,7 @@ const SearchBar = ({ home, searchText, setSearchText, onSubmit }: any) => {
           editable={home ? false : true}
           selectTextOnFocus={home ? false : true}
           onSubmitEditing={() => onSubmit()}
+          autoFocus={home ? false : true}
         />
         <TouchableOpacity
           onPress={async () => await SearchMovies(query)}

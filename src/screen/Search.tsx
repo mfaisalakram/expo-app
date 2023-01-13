@@ -21,28 +21,17 @@ import { AntDesign } from '@expo/vector-icons';
 import { SearchMovies } from 'api';
 
 import axios from 'axios';
-import { API_KEY } from 'config';
+import { API_KEY, POSTER_BASE_URL } from 'config';
 import SearchItem from './SearchItem';
 type SearchStack = StackScreenProps<StackHome<object, ItemsProps>, 'Booking'>;
 
 const Search: React.FC<SearchStack> = () => {
+
+
   const [searchText, setSearchText] = useState('')
   const [loader, setLoader] = useState(false);
   const [searchData, setSearchData] = useState([])
   const navigation = useNavigation();
-  const navigateTo = (screen: any) => {
-    const dt: never = {
-      name: screen,
-      key: undefined,
-      params: {},
-      merge: undefined,
-    } as never;
-    navigation.navigate(dt);
-  };
-
-  const SearchMovie = async (query: any, pages = 1) => {
-    // console.log(query)
-  };
 
 
   const getSearchData = async (query: any) => {
@@ -63,11 +52,6 @@ const Search: React.FC<SearchStack> = () => {
     }
   };
 
-  useEffect(() => {
-    setSearchData([])
-  }
-    , [])
-
 
   return (
     <View style={{ backgroundColor: Color.purple1, flex: 1, }}>
@@ -83,18 +67,30 @@ const Search: React.FC<SearchStack> = () => {
             <ActivityIndicator
               size={'large'}
               color={Color.purple2}
-              style={{ marginTop: '50%' }}
+              style={{ marginTop: '100%' }}
             />
           ) : (
-            <>
-              {searchData.length > 0 ?
-                <FlatList
-                  data={searchData}
-                  renderItem={SearchItem}
-                  keyExtractor={item => item?.id}
-                  numColumns={2}
-                /> : <Text style={{ color: Color.purple2, textAlign: 'center', marginTop: '50%' }}>no searched movie yet</Text>}
-            </>
+            <ScrollView>
+              <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', marginBottom: 150 }}>
+                {
+                  searchData?.map((item) => (
+                    <TouchableOpacity style={styles.movieItem} key={item?.id} onPress={() => { navigation.navigate('Detail', item) }}>
+                      <Image
+                        source={{
+                          uri: `${POSTER_BASE_URL}${item?.poster_path}`,
+                        }}
+                        style={styles.actorImage}
+                      />
+                      <View style={{ position: 'absolute', bottom: 5, left: 10 }}>
+                        <Text style={{ backgroundColor: Color.yellow1, width: 40, paddingHorizontal: 2 }}>{item?.vote_average} <AntDesign name="star" size={12} color="black" /></Text>
+                        <Text style={styles.movieTitleText}>{item?.title}</Text>
+                        <View style={{ flexDirection: 'row', overflow: 'hidden' }}><Text style={styles.genersText}>#Family</Text><Text style={styles.genersText}> #Horror</Text></View>
+                      </View>
+                    </TouchableOpacity>
+                  ))
+                }
+              </View>
+            </ScrollView>
           )}
 
         </View>
@@ -131,11 +127,12 @@ const styles = StyleSheet.create({
     // flexDirection: 'column',
 
   },
-  movieItem: { marginTop: 20 },
+  movieItem: { marginTop: 20, flexBasis: '50%', opacity: 0.7 },
   actorImage: {
     width: 150,
     height: 170,
   },
-  movieTitleText: { color: Color.white, fontWeight: 'bold', fontSize: 17 },
-  genersText: { color: Color.white },
+  movieTitleText: { color: Color.white, fontWeight: 'bold', fontSize: 15, width: 140 },
+  genersText: { color: '#f0f0f0' },
+
 });

@@ -42,28 +42,29 @@ export function DrawerContent(props: Props) {
         <Text style={styles().heading}>WELCOME!</Text>
         <TouchableOpacity
           style={styles().sectionView}
-          onPress={() => navigateTo('Aboutus')}
+          onPress={() => navigateTo('Home')}
         >
           <Feather name="home" style={styles().sectionViewIcon} />
           <Text style={styles().sectionViewText}>Home</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles().sectionView}
-          onPress={GetTVShow}
+          onPress={() => navigateTo('TvShows')}
         >
           <FontAwesome name="tv" style={styles().sectionViewIcon} />
           <Text style={styles().sectionViewText}>TV Shows</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles().sectionView}
-          onPress={() => navigateTo('TeamProfile')}
+          onPress={() => navigateTo('Theaters')}
         >
           <Entypo name="users" style={styles().sectionViewIcon} />
           <Text style={styles().sectionViewText}>Theaters</Text>
         </TouchableOpacity>
+
         <TouchableOpacity
           style={styles().sectionView}
-          onPress={() => navigateTo('TeamProfile')}
+          onPress={() => navigateTo('Favorites')}
         >
           <Fontisto name="favorite" style={styles().sectionViewIcon} />
           <Text style={styles().sectionViewText}>My Favorite</Text>

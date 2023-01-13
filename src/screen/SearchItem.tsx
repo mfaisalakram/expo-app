@@ -18,12 +18,10 @@ import { useNavigation } from '@react-navigation/native';
 
 const SearchItem = ({ item: { poster_path, title, vote_average, id } }: any) => {
 
-    const navigation = useNavigation();
+    // const navigation = useNavigation();
 
-
-    // onPress={() => navigation.navigate('Detail', item)}
     return (
-        <TouchableOpacity style={styles.movieItem} >
+        <TouchableOpacity style={styles.movieItem} key={id} onPress={() => { console.log('pressssssss') }}>
             <Image
                 source={{
                     uri: `${POSTER_BASE_URL}${poster_path}`,
@@ -48,6 +46,6 @@ const styles = StyleSheet.create({
         width: 140,
         height: 160,
     },
-    movieTitleText: { color: Color.white, fontWeight: 'bold', fontSize: 17 },
+    movieTitleText: { color: Color.white, fontWeight: 'bold', fontSize: 15, width: 50, },
     genersText: { color: Color.white },
 });

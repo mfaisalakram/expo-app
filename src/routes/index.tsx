@@ -6,6 +6,13 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { DrawerContent } from './drawer-content';
 import Setting from 'screen/Setting';
 import Search from 'screen/Search';
+import About from 'screen/About/About';
+import Privacy from 'screen/Privacy/Privacy';
+import PersonDetail from 'screen/PersonDetail/PersonDetail';
+import TvShows from 'screen/TvShows/TvShows';
+import Theaters from 'screen/Theaters/Theaters';
+import Favorites from 'screen/Favorites/Favorites';
+
 const Screen = createSharedElementStackNavigator<StackHome>();
 
 export function springyFadeIn() {
@@ -66,6 +73,13 @@ export const HomeStack = () => {
 
       <Drawer.Screen name="Setting" component={Setting} />
       <Drawer.Screen name="Search" component={Search} />
+
+      <Drawer.Screen name="About" component={About} />
+      <Drawer.Screen name="Privacy" component={Privacy} />
+      <Drawer.Screen name="PersonDetail" component={PersonDetail} />
+      <Drawer.Screen name="TvShows" component={TvShows} />
+      <Drawer.Screen name="Theaters" component={Theaters} />
+      <Drawer.Screen name="Favorites" component={Favorites} />
     </Drawer.Navigator>
   );
 };
