@@ -49,7 +49,6 @@ const RenderItem: FC<List> = memo(
       (index - 1) * ITEM_W,
       index * ITEM_W,
     ];
-
     const translateY = listX.interpolate({
       inputRange,
       outputRange: [-100, 0, -100],
@@ -78,6 +77,7 @@ const RenderItem: FC<List> = memo(
             style={{ transform: [{ translateY: itemTranslate }] }}
             src={{ uri: item.poster }}
             title={item.title}
+            id={item.key}
           />
         </TouchableOpacity>
       </View>
@@ -128,11 +128,9 @@ const Home: React.FC<HomeStack> = ({ navigation }: any) => {
     if (ref.current && nextPage) {
       //@ts-ignore
       getMovies(page + 1)
-
     }
     else if (ref.current && prevPage) {
       getMovies(page - 1)
-
     }
   }, [next, calback, nextPage]);
 
