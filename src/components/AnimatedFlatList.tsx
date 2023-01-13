@@ -1,8 +1,8 @@
 import hoistNonReactStatics from 'hoist-non-react-statics';
-import React, {useRef} from 'react';
-import {FlatList, FlatListProps, ScrollView} from 'react-native';
+import React, { useRef } from 'react';
+import { FlatList, FlatListProps, ScrollView } from 'react-native';
 import Animated from 'react-native-reanimated';
-import {render} from 'react-dom';
+import { render } from 'react-dom';
 
 export function Hoc<T extends object>(Componet: React.ComponentType<T>) {
   return class HighOrder extends React.PureComponent<T> {

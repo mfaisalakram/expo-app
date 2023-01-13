@@ -78,8 +78,8 @@ const PersonDetail = () => {
 
 
     const ProfliesList = ({ filepath }: any) => (<View>
-        <View style={{ marginHorizontal: 10, }}>
-            <Image source={{ uri: `${POSTER_BASE_URL}${filepath}` }} style={{ width: 120, height: 140 }} />
+        <View style={{ marginHorizontal: 10, width: 130, height: 160, borderRadius: 4, }}>
+            <Image source={{ uri: `${POSTER_BASE_URL}${filepath}` }} style={{ width: '100%', height: '100%', borderRadius: 4, }} />
         </View>
     </View>)
 
@@ -142,15 +142,13 @@ const PersonDetail = () => {
                                     More Images
                                 </Text>
                                 <ScrollView contentContainerStyle={{ flexDirection: 'row' }}>
-
-
-
-
                                     <FlatList
                                         data={profiles}
                                         renderItem={({ item }) => <ProfliesList filepath={item?.file_path} />}
                                         keyExtractor={item => item?.file_path}
                                         horizontal={true}
+                                        showsHorizontalScrollIndicator={false}
+                                        showsVerticalScrollIndicator={false}
                                     />
                                 </ScrollView>
 

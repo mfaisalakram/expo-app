@@ -129,7 +129,7 @@ const Detail: React.FC<DetailStack> = ({ route }) => {
             <View style={{ position: 'absolute', bottom: 20, left: 20 }}>
               <>
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
-                  <Text style={styles.yearText}>{movieDetail?.release_date?.substring(0, 4)}</Text>
+                  {movieDetail?.release_date && <Text style={styles.yearText}>{movieDetail?.release_date?.substring(0, 4)}</Text>}
                   <Text style={styles.yearRaiting}>
                     {(Math.round(movieDetail.vote_average * 100) / 100).toFixed(1)} <AntDesign name="star" size={12} color="black" />
                   </Text>
@@ -148,15 +148,15 @@ const Detail: React.FC<DetailStack> = ({ route }) => {
             </View>
           </SharedElement>
           <ScrollView style={styles.slider}>
-            <View style={styles.summaryView}>
+            {movieDetail?.overview && <View style={styles.summaryView}>
               <Text style={styles.summaryHeading}>
                 <FontAwesome name="pause" size={12} color={Color.purple2} />{' '}
                 Summary
               </Text>
               <Text style={styles.summaryText}>{movieDetail?.overview}</Text>
-            </View>
+            </View>}
 
-            <View style={styles.summaryView}>
+            {movieDetail?.credits?.cast.length > 0 && <View style={styles.summaryView}>
               <Text style={styles.summaryHeading}>
                 <FontAwesome name="pause" size={12} color={Color.purple2} />{' '}
                 Cast
@@ -185,7 +185,7 @@ const Detail: React.FC<DetailStack> = ({ route }) => {
                   }
                 )}
               </ScrollView>
-            </View>
+            </View>}
 
             <View style={styles.summaryView}>
               <Text style={styles.summaryHeading}>
