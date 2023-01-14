@@ -27,11 +27,31 @@ const Provides: React.FC = ({ children }) => {
   const [page, setPages] = useState(1);
   const [favorite, setFavorites] = useState<Array<Number>>([]);
   const [movie, loading, pages] = useFetchMore(page);
+
+  const [fav, setFav] = useState([])
+
+  const displayData = async ()=>{  
+    try{  
+      let user = await AsyncStorage.getItem('favorite');  
+      if(user) {
+        let users = user.split(',').map(Number);
+        console.log({users});
+        
+        setFav(users)
+      }
+    }  
+    catch(error){  
+      console.log({error});
+      
+    } 
+  }
   useEffect(() => {
+      displayData()
     if (favorite.length > 0) {
+      console.log("fav inside the storage", [...fav ,favorite].length);
       console.log("Hllllllllllllllllllllllllllllc");
       
-      AsyncStorage.setItem('favorite', `${favorite}`);
+      AsyncStorage.setItem('favorite', `${[...fav ,favorite] }`);
     }
   }, [favorite]);
   const value = useMemo(() => ({movie, loading, pages, page, setPages}), []);
