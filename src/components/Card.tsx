@@ -4,6 +4,7 @@ import Animated from 'react-native-reanimated';
 import { SharedElement } from 'react-navigation-shared-element';
 import { useMovie } from 'hooks';
 import { MaterialIcons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const { width, height } = Dimensions.get('screen');
 
@@ -17,7 +18,9 @@ interface Props {
 export const ITEM_W = width * 0.5;
 
 const Card: React.FC<Props> = React.memo(({ src, title, style, id }) => {
-  const { favorite, setFavorites } = useMovie()
+  const {favorite, setFavorites } = useMovie()
+  // const favorite = async() => {return await AsyncStorage.getItem('favorite');  }
+  // const favorite = favoriteFun()
   const checkFav = (id) => favorite?.filter((dt) => {
     return (dt === id)
   });
@@ -51,6 +54,8 @@ const Card: React.FC<Props> = React.memo(({ src, title, style, id }) => {
       ))
     )
   }
+  console.log("helo");
+  
   let value: any
   useEffect(() => {
     value = data()

@@ -1,6 +1,6 @@
 import { useFetchMore } from '@utils';
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
+import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 interface Context {
   loading: boolean;
@@ -29,10 +29,12 @@ const Provides: React.FC = ({ children }) => {
   const [movie, loading, pages] = useFetchMore(page);
   useEffect(() => {
     if (favorite.length > 0) {
-      AsyncStorage.setItem('DEMO_APP::COUNT_VALUE', `${favorite}`);
+      console.log("Hllllllllllllllllllllllllllllc");
+      
+      AsyncStorage.setItem('favorite', `${favorite}`);
     }
   }, [favorite]);
-  // const value = useMemo(() => ({movie, loading, pages, page, setPages}), []);
+  const value = useMemo(() => ({movie, loading, pages, page, setPages}), []);
 
   return <ContextAPI.Provider value={{ movie, loading, page, setPages, pages, favorite, setFavorites }}>{children}</ContextAPI.Provider>;
 };
